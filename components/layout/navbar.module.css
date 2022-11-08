@@ -1,0 +1,41 @@
+.pageTitle {
+  display: none;
+}
+.toggleButton {
+  width: 2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding-top: 0;
+  padding-bottom: 0;
+  vertical-align: middle;
+  margin-right: 1rem;
+}
+
+.toggleButton:focus {
+  outline: none;
+}
+
+.toggleButtonBar {
+  width: 100%;
+  height: 0.2rem;
+  background: black;
+  display: block;
+  margin: 0.4rem 0;
+}
+.notifications,
+.settings {
+  display: none;
+}
+@media (min-width: 50rem) {
+  .pageTitle {
+    display: block;
+  }
+  .toggleButton {
+    display: none;
+  }
+  .notifications,
+  .settings {
+    display: block;
+  }
+}
