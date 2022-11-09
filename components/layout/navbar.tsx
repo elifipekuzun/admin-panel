@@ -44,7 +44,7 @@ export const Navbar: React.FC<{ onToggleButtonClick: () => void }> = ({
   }, []);
   if (
     windowDimensions &&
-    windowDimensions.width < 800 &&
+    windowDimensions.width < 768 &&
     adminDropdown.length < 5
   ) {
     adminDropdown = [
@@ -55,7 +55,7 @@ export const Navbar: React.FC<{ onToggleButtonClick: () => void }> = ({
   }
 
   return (
-    <section className="flex px-3 items-center justify-between">
+    <section className="flex px-3 pb-3 items-center justify-between">
       <button className={classes.toggleButton} onClick={onToggleButtonClick}>
         <span className={classes.toggleButtonBar}></span>
         <span className={classes.toggleButtonBar}></span>
@@ -78,7 +78,7 @@ export const Navbar: React.FC<{ onToggleButtonClick: () => void }> = ({
             )}
           </div>
           {adminDropDownVisible && (
-            <div className="absolute right-10 bg-black-500 shadow-lg shadow-black/50">
+            <div className="absolute z-10 right-10 bg-black-500 shadow-lg shadow-black/50">
               <DropdownMenu
                 logout
                 textColor="text-gray-700"

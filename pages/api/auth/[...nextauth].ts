@@ -45,9 +45,4 @@ export default NextAuth({
       },
     }),
   ],
-  callbacks: {
-    session({ session, token, user }) {
-      return session;
-    },
-  },
 });

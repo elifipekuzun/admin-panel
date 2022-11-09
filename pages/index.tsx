@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { AuthForm } from '../components/auth-form';
+import { ActivityIndicator } from '../components/activity-indicator';
 
 const AuthenticationPage: NextPage = () => {
   const { status } = useSession();
@@ -15,14 +16,10 @@ const AuthenticationPage: NextPage = () => {
   }, [status]);
 
   if (status === 'loading') {
-    return (
-      <div className="text-center w-screen">
-        <h1>Loading...</h1>
-      </div>
-    );
+    return <ActivityIndicator />;
+  } else {
+    return <AuthForm formType="login" />;
   }
-
-  return <AuthForm formType="login" />;
 };
 
 export default AuthenticationPage;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
+import { ActivityIndicator } from './activity-indicator';
 
 export const AuthForm: React.FC<{ formType: string }> = ({ formType }) => {
   const [email, setEmail] = useState('');
@@ -13,11 +14,13 @@ export const AuthForm: React.FC<{ formType: string }> = ({ formType }) => {
     e.preventDefault();
     setLoading(true);
     if (formType === 'login') {
-      const result = await signIn('credentials', { email, password });
-      if (!result || !result.ok) {
-        setLoading(false);
-        setErrorMessage(result?.error!);
-        return;
+      try {
+        const result = await signIn('credentials', { email, password });
+        console.log(result);
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
       }
     } else {
       const response = await fetch('/api/auth/signup', {
@@ -138,10 +141,15 @@ export const AuthForm: React.FC<{ formType: string }> = ({ formType }) => {
                 <button className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-4 py-2 rounded-lg text-sm text-white bg-slate-700 border border-transparent active:bg-slate-900 hover:bg-slate-900 focus:ring focus:ring-purple-300 mt-4 h-12 w-full">
                   {formType === 'login' ? 'Login' : 'Create Account'}
                 </button>
-                <p>
+                {loading && (
+                  <div>
+                    <ActivityIndicator />
+                  </div>
+                )}
+                {/* <p>
                   {loading && 'Loading...'}
                   {errorMessage && errorMessage}
-                </p>
+                </p> */}
                 <hr className="my-10" />
                 <p className="mx-auto hover:cursor-pointer">
                   <a

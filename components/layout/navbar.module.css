@@ -27,7 +27,7 @@
 .settings {
   display: none;
 }
-@media (min-width: 50rem) {
+@media (min-width: 768px) {
   .pageTitle {
     display: block;
   }
