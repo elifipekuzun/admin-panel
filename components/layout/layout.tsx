@@ -24,7 +24,7 @@ export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
     <div className="flex h-full w-full">
       {mobileNavBarVisible && (
         <div
-          className="w-screen absolute top-0 left-0 bg-black/40"
+          className="w-full h-full absolute top-0 left-0 bg-black/40 z-20"
           onClick={() => setMobileNavBarVisible(false)}
         ></div>
       )}

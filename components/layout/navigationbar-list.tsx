@@ -21,7 +21,7 @@ const productDropdown: DropdownProps[] = [
 ];
 const categoryDropdown: DropdownProps[] = [
   { href: '/admin/category', title: 'View All Category' },
-  { href: '/admin/add-category', title: 'Add Category' },
+  { href: '/admin/category/add-category', title: 'Add Category' },
 ];
 export const NavigationbarList: React.FC = () => {
   const [toggleProductsDropdown, setToggleProductsDropdown] = useState(false);

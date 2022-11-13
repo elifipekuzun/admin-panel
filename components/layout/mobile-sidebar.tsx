@@ -10,7 +10,7 @@ export const MobileSidebar: React.FC<{ mobileNavBarVisible: boolean }> = ({
     <>
       {mobileNavBarVisible && (
         <nav
-          className={`py-8  bg-slate-700 h-screen absolute top-0 left-0 ${classes.mobileSidebar}`}
+          className={`py-8 z-30  bg-slate-700 h-screen absolute top-0 left-0 ${classes.mobileSidebar}`}
         >
           <NavigationbarList />
         </nav>
