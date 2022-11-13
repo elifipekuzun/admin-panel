@@ -7,19 +7,23 @@ export const AddCategoryForm: React.FC = () => {
   const [type, setType] = useState<string | undefined>();
   const [title, setTitle] = useState('');
   const [childValue, setChildValue] = useState('');
-  const [tags, setTags] = useState<string[]>([]);
+  const [childTags, setChildTags] = useState<string[]>([]);
 
   const router = useRouter();
 
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch('/api/add', {
+    const response = await fetch('/api/auth/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ image: catImage, title, type, tags }),
+      body: JSON.stringify({ image: catImage, title, type, childTags }),
     });
+    const data = await response.json();
+    if (data.message === 'Success') {
+      router.push('/admin/category');
+    }
   };
 
   return (
@@ -48,6 +52,7 @@ export const AddCategoryForm: React.FC = () => {
                     <div className="px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md cursor-pointer">
                       <input
                         accept="image/*"
+                        className=""
                         type={'file'}
                         autoComplete="off"
                         tabIndex={-1}
@@ -57,13 +62,14 @@ export const AddCategoryForm: React.FC = () => {
                       <span className="mx-auto flex justify-center">
                         <svg
                           fill="none"
+                          stroke="currentColor"
                           strokeWidth={2}
                           viewBox="0 0 24 24"
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          className="text-3xl text-slate-500"
-                          height={16}
-                          width={16}
+                          className="text-3xl text-green-500"
+                          height={'2rem'}
+                          width={'2rem'}
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <polyline points="16 16 12 12 8 16"></polyline>
@@ -114,14 +120,15 @@ export const AddCategoryForm: React.FC = () => {
                   />
                 </div>
               </div>
+
               <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <label className="block text-sm text-gray-700 dark:text-gray-400 col-span-4 sm:col-span-2 font-medium text-sm">
                   Child Category
                 </label>
                 <div className="col-span-8 sm:col-span-4">
                   <div className={`${classes['react-tag-input']}`}>
-                    {tags &&
-                      tags.map((tag, i) => {
+                    {childTags &&
+                      childTags.map((tag, i) => {
                         return (
                           <div
                             className={`${classes['react-tag-input__tag']}`}
@@ -134,7 +141,9 @@ export const AddCategoryForm: React.FC = () => {
                             </div>
                             <div
                               onClick={() => {
-                                setTags(tags.filter((_, index) => index !== i));
+                                setChildTags(
+                                  childTags.filter((_, index) => index !== i)
+                                );
                               }}
                               className={`${classes['react-tag-input__tag__remove']}`}
                             ></div>
@@ -144,13 +153,13 @@ export const AddCategoryForm: React.FC = () => {
                     <input
                       className={`block w-full px-3 py-1 text-sm focus:outline-none leading-5 rounded-md  border-gray-200 dark:bg-gray-700 border h-12 text-sm bg-gray-100 ${classes['react-tag-input__input']}`}
                       type={'text'}
-                      required
                       name="title"
                       value={childValue}
+                      placeholder="Child category  (Write then press enter to add new child category)"
                       onChange={(e) => setChildValue(e.target.value)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          setTags([...tags, childValue]);
+                          setChildTags([...childTags, childValue]);
                           setChildValue('');
                         }
                       }}

@@ -9,8 +9,7 @@ export interface IProduct {
 
 export interface ICategory {
   title: string;
-  category_type: string;
-  parent: ICategory[];
+  type: string;
   image: string;
-  children: ICategory[];
+  childTags: string[];
 }
