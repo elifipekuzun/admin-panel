@@ -8,8 +8,9 @@ export interface IProduct {
 }
 
 export interface ICategory {
+  _id: string;
   title: string;
   type: string;
   image: string;
-  childTags: string[];
+  tags: string[];
 }

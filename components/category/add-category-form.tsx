@@ -1,28 +1,64 @@
 import React, { useState } from 'react';
 import classes from './add-category-form.module.css';
 import { useRouter } from 'next/router';
+import { ICategory } from '../../lib/types';
 
-export const AddCategoryForm: React.FC = () => {
-  const [catImage, setCatImage] = useState('');
-  const [type, setType] = useState<string | undefined>();
-  const [title, setTitle] = useState('');
+export const AddCategoryForm: React.FC<{ category?: ICategory }> = ({
+  category,
+}) => {
+  const [catImage, setCatImage] = useState(category ? category.image : '');
+  const [imageFile, setImageFile] = useState<File | undefined>();
+  const [type, setType] = useState<string | undefined>(
+    category && category.type
+  );
+  const [title, setTitle] = useState(category ? category.title : '');
   const [childValue, setChildValue] = useState('');
-  const [childTags, setChildTags] = useState<string[]>([]);
+  const [childTags, setChildTags] = useState<string[]>(
+    category ? category.tags : []
+  );
 
   const router = useRouter();
 
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch('/api/auth/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ image: catImage, title, type, childTags }),
-    });
-    const data = await response.json();
-    if (data.message === 'Success') {
-      router.push('/admin/category');
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append('image', imageFile);
+      const response = await fetch('/api/auth/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.message !== 'Success') {
+        return;
+      }
+    }
+    if (category) {
+      const response = await fetch('/api/auth/add', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          image: catImage,
+          title,
+          type,
+          tags: childTags,
+          _id: category._id,
+        }),
+      });
+      const data = await response.json();
+      if (data.message === 'Success') router.push('/admin/category');
+    } else {
+      const response = await fetch('/api/auth/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image: catImage, title, type, tags: childTags }),
+      });
+      const data = await response.json();
+      if (data.message === 'Success') router.push('/admin/category');
     }
   };
 
@@ -52,12 +88,15 @@ export const AddCategoryForm: React.FC = () => {
                     <div className="px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md cursor-pointer">
                       <input
                         accept="image/*"
-                        className=""
-                        type={'file'}
+                        type="file"
                         autoComplete="off"
                         tabIndex={-1}
-                        value={catImage}
-                        onChange={(e) => setCatImage(e.target.value)}
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            setCatImage(e.target.files[0].name);
+                            setImageFile(e.target.files[0]);
+                          }
+                        }}
                       />
                       <span className="mx-auto flex justify-center">
                         <svg

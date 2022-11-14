@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import { getDB } from '../../../lib/db';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -17,12 +17,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await client.close();
 
     res.status(200).json({ message: 'Success' });
+  } else if (req.method === 'PUT') {
+    const { title, tags, image, type, _id } = req.body;
+    await client
+      .db('adminDB')
+      .collection('category')
+      .findOneAndUpdate(
+        { _id: new ObjectId(_id) },
+        { $set: { title, tags, image, type } }
+      );
+    await client.close();
+    res.status(200).json({ message: 'Success' });
   } else if (req.method === 'GET') {
-    const categories = await client
+    const cats = await client
       .db('adminDB')
       .collection('category')
       .find()
       .toArray();
+    const categories = cats.map((item) => {
+      return { ...item, _id: item._id.toString() };
+    });
     await client.close();
     res.status(200).json({ message: 'Success', categories });
   }
