@@ -5,15 +5,16 @@ import classes from './sidebar.module.css';
 
 export const Sidebar: React.FC<{
   mobileNavBarVisible: boolean;
-}> = ({ mobileNavBarVisible }) => {
+  adminName: string;
+}> = ({ mobileNavBarVisible, adminName }) => {
   return (
-    <section className="min-h-screen h-full">
+    <section className=" h-full">
       <MobileSidebar mobileNavBarVisible={mobileNavBarVisible} />
       <nav
         className={`py-8 bg-slate-700 min-h-screen h-full ${classes.mainNavBar}`}
       >
         <div className=" text-white text-center mb-8 font-bold text-lg">
-          Admin Name
+          {adminName}
         </div>
         <NavigationbarList />
       </nav>

@@ -17,7 +17,7 @@ interface DropdownProps {
 
 const productDropdown: DropdownProps[] = [
   { href: '/admin/products', title: 'View All Products' },
-  { href: '/admin/add-product', title: 'Add Product' },
+  { href: '/admin/products/add-product', title: 'Add Product' },
 ];
 const categoryDropdown: DropdownProps[] = [
   { href: '/admin/category', title: 'View All Category' },

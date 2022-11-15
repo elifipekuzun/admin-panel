@@ -7,7 +7,7 @@ import { ActivityIndicator } from '../activity-indicator';
 
 export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [mobileNavBarVisible, setMobileNavBarVisible] = useState(false);
-  const { status } = useSession();
+  const { status, data } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -21,17 +21,23 @@ export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <div className="flex h-full w-full">
+    <div className="flex h-full w-full relative">
       {mobileNavBarVisible && (
         <div
           className="w-full h-full absolute top-0 left-0 bg-black/40 z-20"
           onClick={() => setMobileNavBarVisible(false)}
         ></div>
       )}
-      <Sidebar mobileNavBarVisible={mobileNavBarVisible} />
+      <Sidebar
+        mobileNavBarVisible={mobileNavBarVisible}
+        adminName={data?.user?.name!}
+      />
       <div className="w-full">
         <header className="mt-4">
-          <Navbar onToggleButtonClick={() => setMobileNavBarVisible(true)} />
+          <Navbar
+            adminName={data?.user?.name!}
+            onToggleButtonClick={() => setMobileNavBarVisible(true)}
+          />
         </header>
         <main className="bg-gray-100">{children}</main>
       </div>

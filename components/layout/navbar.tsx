@@ -14,9 +14,10 @@ interface DropdownProps {
   title: string;
 }
 
-export const Navbar: React.FC<{ onToggleButtonClick: () => void }> = ({
-  onToggleButtonClick,
-}) => {
+export const Navbar: React.FC<{
+  onToggleButtonClick: () => void;
+  adminName: string;
+}> = ({ onToggleButtonClick, adminName }) => {
   let adminDropdown: DropdownProps[] = [
     { href: '/admin/profile', title: 'View Profile' },
     { href: '/admin/edit-profile', title: 'Edit Profile' },
@@ -63,14 +64,16 @@ export const Navbar: React.FC<{ onToggleButtonClick: () => void }> = ({
       </button>
 
       <Searchbar />
-      <h3 className={`text-xl ${classes.pageTitle}`}>Dashboard</h3>
+      <h3 className={`text-xl ${classes.pageTitle}`}>
+        <a href="/admin">Dashboard</a>
+      </h3>
       <div className="flex items-center">
         <div className="mr-6">
           <div
             onClick={() => setAdminDropdownVisible(!adminDropDownVisible)}
             className="flex items-center hover:cursor-pointer "
           >
-            <span className="mx-1">Admin</span>
+            <span className="mx-1">{adminName}</span>
             {adminDropDownVisible ? (
               <MdOutlineKeyboardArrowUp />
             ) : (

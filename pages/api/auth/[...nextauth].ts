@@ -41,7 +41,11 @@ export default NextAuth({
           throw new Error('Wrong password!');
         }
         await db.close();
-        return { email: credentials.email, id: user._id.toString() };
+        return {
+          email: credentials.email,
+          id: user._id.toString(),
+          name: user.name,
+        };
       },
     }),
   ],

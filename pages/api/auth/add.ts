@@ -39,6 +39,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
     await client.close();
     res.status(200).json({ message: 'Success', categories });
+  } else if (req.method === 'DELETE') {
+    const { _id } = req.body;
+    await client
+      .db('adminDB')
+      .collection('category')
+      .findOneAndDelete({ _id: new ObjectId(_id) });
+    await client.close();
+
+    res.status(200).json({ message: 'Success' });
   }
 };
 
