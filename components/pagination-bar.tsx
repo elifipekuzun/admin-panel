@@ -20,8 +20,11 @@ export const PaginationBar: React.FC<{
     <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-white text-gray-500 dark:text-gray-400 bg-slate-100">
       <div className="flex flex-col justify-between text-xs sm:flex-row text-gray-600 dark:text-gray-400">
         <span className="flex items-center font-semibold tracking-wide uppercase">
-          Showing {currentPage} - {currentPage * ITEM_NUM_PER_PAGE} of{' '}
-          {items.length}
+          Showing {(currentPage - 1) * ITEM_NUM_PER_PAGE + 1} -{' '}
+          {currentPage * ITEM_NUM_PER_PAGE > items.length
+            ? items.length
+            : currentPage * ITEM_NUM_PER_PAGE}{' '}
+          of {items.length}
         </span>
         <div className="flex mt-2 sm:mt-auto sm:justify-end">
           <nav aria-label="Table navigation">

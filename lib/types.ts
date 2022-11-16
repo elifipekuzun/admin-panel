@@ -1,10 +1,14 @@
 export interface IProduct {
+  _id: string;
   image: string;
+  categoryType: string;
+  parentCategory: string;
   title: string;
+  description: string;
   price: number;
-  categoryName: string;
   discountAmount: number;
-  rating: number;
+  rating?: number;
+  tags: string[];
 }
 
 export interface ICategory {

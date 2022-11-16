@@ -2,6 +2,7 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { Layout } from '../../../components/layout/layout';
 import { CategoryList } from '../../../components/category/category-list';
 import { ICategory } from '../../../lib/types';
+import { ActivityIndicator } from '../../../components/activity-indicator';
 
 const CategoryPage = ({
   categories,

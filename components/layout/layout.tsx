@@ -21,7 +21,7 @@ export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <div className="flex h-full w-full relative">
+    <div className="flex relative">
       {mobileNavBarVisible && (
         <div
           className="w-full h-full absolute top-0 left-0 bg-black/40 z-20"
@@ -32,14 +32,14 @@ export const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
         mobileNavBarVisible={mobileNavBarVisible}
         adminName={data?.user?.name!}
       />
-      <div className="w-full">
+      <div className="w-full bg-gray-100">
         <header className="mt-4">
           <Navbar
             adminName={data?.user?.name!}
             onToggleButtonClick={() => setMobileNavBarVisible(true)}
           />
         </header>
-        <main className="bg-gray-100">{children}</main>
+        <main className="">{children}</main>
       </div>
     </div>
   );

@@ -11,6 +11,13 @@ export const ProductForm: React.FC<{ categories: ICategory[] }> = ({
   const [tagValue, setTagValue] = useState('');
   const [categoryType, setCategoryType] = useState('');
   const [parentCategories, setParentCategories] = useState<ICategory[]>([]);
+  const [parentCategory, setParentCategory] = useState('');
+  const [image, setImage] = useState('');
+  const [imageFile, setImageFile] = useState<File | undefined>();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [discountAmount, setDiscountAmount] = useState('');
 
   useEffect(() => {
     if (categoryType) {
@@ -22,8 +29,42 @@ export const ProductForm: React.FC<{ categories: ICategory[] }> = ({
     }
   }, [categoryType]);
 
+  const submitHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append('image', imageFile);
+      const response = await fetch('/api/auth/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.message !== 'Success') {
+        return;
+      }
+    }
+    const response = await fetch('/api/auth/product', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        image,
+        parentCategory,
+        title,
+        categoryType,
+        description,
+        price,
+        discountAmount,
+        tags,
+      }),
+    });
+    const data = await response.json();
+    if (data.message === 'Success') router.push('/admin/products');
+  };
+
   return (
-    <div className="flex flex-col w-full h-full justify-between">
+    <div className="flex flex-col w-full justify-between relative">
       <div className="w-full relative p-6 border-b border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
         <div>
           <h4 className="text-xl font-medium">Add Product</h4>
@@ -32,9 +73,12 @@ export const ProductForm: React.FC<{ categories: ICategory[] }> = ({
           </p>
         </div>
       </div>
-      <div className="w-full dark:bg-gray-700 dark:text-gray-200 relative ">
-        <div className="absolute overflow-scroll mr-0 mb-0 ">
-          <form className="w-full h-full relative pb-40 md:pb-20">
+      <div className="relative">
+        <div className="mr-0 mb-0 ">
+          <form
+            className="w-full h-full relative pb-40 md:pb-20"
+            onSubmit={submitHandler}
+          >
             <div className="p-6 relative flex-grow scrollbar-hide w-full max-h-full">
               <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
                 <label className="block text-sm text-gray-700 dark:text-gray-400 col-span-4 sm:col-span-2 font-medium text-sm">
@@ -48,7 +92,12 @@ export const ProductForm: React.FC<{ categories: ICategory[] }> = ({
                         type="file"
                         autoComplete="off"
                         tabIndex={-1}
-                        onChange={(e) => {}}
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            setImage(e.target.files[0].name);
+                            setImageFile(e.target.files[0]);
+                          }
+                        }}
                       />
                       <span className="mx-auto flex justify-center">
                         <svg
@@ -105,6 +154,7 @@ export const ProductForm: React.FC<{ categories: ICategory[] }> = ({
                     <select
                       name="parentCategory"
                       className="block w-full px-2 py-1 text-sm dark:text-gray-300 focus:outline-none rounded-md form-select border-gray-200 border leading-5 h-12 text-sm bg-gray-100 "
+                      onChange={(e) => setParentCategory(e.target.value)}
                     >
                       <option hidden>Select Parent Category</option>
                       {parentCategories.map((cat) => {
@@ -129,6 +179,8 @@ export const ProductForm: React.FC<{ categories: ICategory[] }> = ({
                     type={'text'}
                     required
                     name="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
               </div>
@@ -142,6 +194,8 @@ export const ProductForm: React.FC<{ categories: ICategory[] }> = ({
                     rows={3}
                     placeholder="Product detail"
                     className="p-4 block w-full text-sm dark:text-gray-300 rounded-md focus:outline-none form-textarea border-gray-300 dark:border-gray-600 dark:bg-gray-700  border text-sm bg-gray-100 border-transparent"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                   ></textarea>
                 </div>
               </div>
@@ -156,6 +210,24 @@ export const ProductForm: React.FC<{ categories: ICategory[] }> = ({
                     required
                     name="price"
                     placeholder="Price"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6 items-center">
+                <label className="block text-sm text-gray-700 dark:text-gray-400 col-span-4 sm:col-span-2 font-medium text-sm">
+                  Discount Amount (%)
+                </label>
+                <div className="col-span-8 sm:col-span-4">
+                  <input
+                    className="block w-full px-3 py-1 text-sm focus:outline-none leading-5 rounded-md border-gray-200 dark:border-gray-600  dark:bg-gray-700 border h-12 text-sm  block w-full bg-gray-100 dark:bg-white"
+                    type={'number'}
+                    required
+                    name="discountAmount"
+                    placeholder="Type discount amount as a percentage"
+                    value={discountAmount}
+                    onChange={(e) => setDiscountAmount(e.target.value)}
                   />
                 </div>
               </div>

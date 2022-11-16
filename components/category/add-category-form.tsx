@@ -75,8 +75,8 @@ export const AddCategoryForm: React.FC<{ category?: ICategory }> = ({
           </p>
         </div>
       </div>
-      <div className="w-full dark:bg-gray-700 dark:text-gray-200 relative ">
-        <div className="absolute overflow-scroll mr-0 mb-0 ">
+      <div className="w-full relative ">
+        <div className="mr-0 mb-0 ">
           <form
             className="w-full h-full relative pb-40 md:pb-20"
             onSubmit={submitHandler}

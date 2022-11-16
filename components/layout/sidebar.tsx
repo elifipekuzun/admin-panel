@@ -8,11 +8,9 @@ export const Sidebar: React.FC<{
   adminName: string;
 }> = ({ mobileNavBarVisible, adminName }) => {
   return (
-    <section className=" h-full">
+    <section className="min-h-screen">
       <MobileSidebar mobileNavBarVisible={mobileNavBarVisible} />
-      <nav
-        className={`py-8 bg-slate-700 min-h-screen h-full ${classes.mainNavBar}`}
-      >
+      <nav className={`py-8 bg-slate-700 h-full ${classes.mainNavBar}`}>
         <div className=" text-white text-center mb-8 font-bold text-lg">
           {adminName}
         </div>
